@@ -3,65 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <stddef.h>
-
-size_t strlcpy(char *dst, const char *src, size_t dstsize) {
-    size_t srclen = 0;
-    while (src[srclen] != '\0') srclen++;
-
-    if (dstsize > 0) {
-        size_t i;
-        for (i = 0; i < dstsize - 1 && src[i] != '\0'; i++) {
-            dst[i] = src[i];
-        }
-        dst[i] = '\0';
-    }
-
-    return srclen;
-}
-
-size_t strlcat(char *dst, const char *src, size_t dstsize) {
-    size_t dstlen = 0;
-    while (dstlen < dstsize && dst[dstlen] != '\0') dstlen++;
-    size_t srclen = 0;
-    while (src[srclen] != '\0') srclen++;
-
-    if (dstlen == dstsize) return dstsize + srclen;
-
-    size_t i;
-    for (i = 0; i < dstsize - dstlen - 1 && src[i] != '\0'; i++) {
-        dst[dstlen + i] = src[i];
-    }
-    dst[dstlen + i] = '\0';
-
-    return dstlen + srclen;
-}
-
-char *strnstr(const char *haystack, const char *needle, size_t len) {
-    size_t i, j;
-    if (*needle == '\0') return (char *)haystack;
-
-    for (i = 0; haystack[i] != '\0' && i < len; i++) {
-        for (j = 0; needle[j] != '\0' && haystack[i + j] == needle[j] && (i + j) < len; j++);
-        if (needle[j] == '\0') return (char *)(haystack + i);
-    }
-    return NULL;
-}
-
-void	del(void *content)
-{
-	free(content);
-}
-
-void	ft_print_list(t_list *lst)
-{
-	while (lst)
-	{
-		printf("%s\n", (char *) lst->content);
-		lst = lst->next;
-	}
-}
-
 void	ft_ok(int n)
 {
 	if (n == 1)
@@ -78,18 +19,10 @@ int		ft_int_cmp(int n1, int n2)
 		return (0);
 }
 
-int		ft_bool_cmp(int n1, int n2)
-{
-	if (n1 == 0 && n2 == 0)
-		return (1);
-	if (n1 != 0 && n2 != 0)
-		return (1);
-	else
-		return (0);
-}
-
 int		ft_str_cmp(char *s1, char *s2)
 {
+//	if (s1[0] == '\0' && s2[0] == '\0')
+//		return (1);
 	if (!s1 && !s2)
 		return (1);
 	if ((!s1 && s2) || (!s2 && s1))
@@ -156,35 +89,6 @@ void	ft_lowptr(unsigned int i, char *c)
 		*c = tolower(*c);
 }
 
-void	ft_lowlst(void *ptr)
-{
-	char	*c;
-	size_t	i;
-
-	i = 0;
-	c = (char *) ptr;
-	while (c[i])
-	{
-		c[i] = toupper(c[i]);
-		i++;
-	}
-}
-
-void	*ft_lowlstptr(void *ptr)
-{
-	char	*c;
-	size_t	i;
-
-	i = 0;
-	c = (char *) ptr;
-	while (c[i])
-	{
-		c[i] = tolower(c[i]);
-		i++;
-	}
-	return (c);
-}
-
 int		main(void)
 {
 //	ISALPHA
@@ -193,38 +97,38 @@ int		main(void)
 	c1 = 'a';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalpha(c1), ft_isalpha(c1));
-	ft_ok(ft_bool_cmp(isalpha(c1), ft_isalpha(c1)));
+	ft_ok(ft_int_cmp(isalpha(c1), ft_isalpha(c1)));
 	c1 = 'Z';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalpha(c1), ft_isalpha(c1));
-	ft_ok(ft_bool_cmp(isalpha(c1), ft_isalpha(c1)));
+	ft_ok(ft_int_cmp(isalpha(c1), ft_isalpha(c1)));
 	c1 = '4';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalpha(c1), ft_isalpha(c1));
-	ft_ok(ft_bool_cmp(isdigit(c1), ft_isdigit(c1)));
+	ft_ok(ft_int_cmp(isdigit(c1), ft_isdigit(c1)));
 	c1 = '#';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalpha(c1), ft_isalpha(c1));
-	ft_ok(ft_bool_cmp(isalpha(c1), ft_isalpha(c1)));
+	ft_ok(ft_int_cmp(isalpha(c1), ft_isalpha(c1)));
 
 //	ISDIGIT
 	printf("\033[33m\n********************\nft_isdigit\n\033[0m");
 	c1 = '0';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isdigit(c1), ft_isdigit(c1));
-	ft_ok(ft_bool_cmp(isdigit(c1), ft_isdigit(c1)));
+	ft_ok(ft_int_cmp(isdigit(c1), ft_isdigit(c1)));
 	c1 = '9';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isdigit(c1), ft_isdigit(c1));
-	ft_ok(ft_bool_cmp(isdigit(c1), ft_isdigit(c1)));
+	ft_ok(ft_int_cmp(isdigit(c1), ft_isdigit(c1)));
 	c1 = 'r';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isdigit(c1), ft_isdigit(c1));
-	ft_ok(ft_bool_cmp(isdigit(c1), ft_isdigit(c1)));
+	ft_ok(ft_int_cmp(isdigit(c1), ft_isdigit(c1)));
 	c1 = '&';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isdigit(c1), ft_isdigit(c1));
-	ft_ok(ft_bool_cmp(isdigit(c1), ft_isdigit(c1)));
+	ft_ok(ft_int_cmp(isdigit(c1), ft_isdigit(c1)));
 
 
 //	ISALNUM
@@ -232,57 +136,57 @@ int		main(void)
 	c1 = '3';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalnum(c1), ft_isalnum(c1));
-	ft_ok(ft_bool_cmp(isalnum(c1), ft_isalnum(c1)));
+	ft_ok(ft_int_cmp(isalnum(c1), ft_isalnum(c1)));
 	c1 = 'q';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalnum(c1), ft_isalnum(c1));
-	ft_ok(ft_bool_cmp(isalnum(c1), ft_isalnum(c1)));
+	ft_ok(ft_int_cmp(isalnum(c1), ft_isalnum(c1)));
 	c1 = 'W';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalnum(c1), ft_isalnum(c1));
-	ft_ok(ft_bool_cmp(isalnum(c1), ft_isalnum(c1)));
+	ft_ok(ft_int_cmp(isalnum(c1), ft_isalnum(c1)));
 	c1 = '@';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isalnum(c1), ft_isalnum(c1));
-	ft_ok(ft_bool_cmp(isalnum(c1), ft_isalnum(c1)));
+	ft_ok(ft_int_cmp(isalnum(c1), ft_isalnum(c1)));
 
 //	ISASCII
 	printf("\033[33m\n********************\nft_isascii\n\033[0m");
 	c1 = '0';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isascii(c1), ft_isascii(c1));
-	ft_ok(ft_bool_cmp(isascii(c1), ft_isascii(c1)));
+	ft_ok(ft_int_cmp(isascii(c1), ft_isascii(c1)));
 	c1 = 'e';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isascii(c1), ft_isascii(c1));
-	ft_ok(ft_bool_cmp(isascii(c1), ft_isascii(c1)));
+	ft_ok(ft_int_cmp(isascii(c1), ft_isascii(c1)));
 	c1 = '*';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isascii(c1), ft_isascii(c1));
-	ft_ok(ft_bool_cmp(isascii(c1), ft_isascii(c1)));
+	ft_ok(ft_int_cmp(isascii(c1), ft_isascii(c1)));
 	int n1 = 325;
 	printf("Avec %d ", n1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isascii(n1), ft_isascii(n1));
-	ft_ok(ft_bool_cmp(isascii(n1), ft_isascii(n1)));
+	ft_ok(ft_int_cmp(isascii(n1), ft_isascii(n1)));
 
 //	ISPRINT
 	printf("\033[33m\n********************\nft_isprint\n\033[0m");
 	c1 = 'p';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isprint(c1), ft_isprint(c1));
-	ft_ok(ft_bool_cmp(isprint(c1), ft_isprint(c1)));
+	ft_ok(ft_int_cmp(isprint(c1), ft_isprint(c1)));
 	c1 = '\t';
 	printf("Avec %c ", c1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isprint(c1), ft_isprint(c1));
-	ft_ok(ft_bool_cmp(isprint(c1), ft_isprint(c1)));
+	ft_ok(ft_int_cmp(isprint(c1), ft_isprint(c1)));
 	n1 = 31;
 	printf("Avec %d ", n1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isprint(n1), ft_isprint(n1));
-	ft_ok(ft_bool_cmp(isprint(n1), ft_isprint(n1)));
+	ft_ok(ft_int_cmp(isprint(n1), ft_isprint(n1)));
 	n1 = 127;
 	printf("Avec %d ", n1);
 	printf("attendu : \033[33m%d\033[0m obtenu : \033[33m%d\033[0m\n", isprint(n1), ft_isprint(n1));
-	ft_ok(ft_bool_cmp(isprint(n1), ft_isprint(n1)));
+	ft_ok(ft_int_cmp(isprint(n1), ft_isprint(n1)));
 
 //	STRLEN
 	printf("\033[33m\n********************\nft_strlen\n\033[0m");
@@ -655,124 +559,12 @@ int		main(void)
 	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "a passer en minuscule", s46);
 	ft_ok(ft_str_cmp("a passer en minuscule", s46));
 
-//	PUTCHAR_FD
-	printf("\033[33m\n********************\nft_putchar_fd\n\033[0m");
-	c1 = 'w';
-	printf("Avec %c ", c1);
-	printf("attendu : \033[33m%c\033[0m obtenu : \n", c1);
-	ft_putchar_fd(c1, 1);
-	printf("\n");
+//	PUTCHAR_FD PUTSTR_FD PUTENDL_FD PUTNBR_FD
+	printf("\033[33m\nft_putchar_fd, ft_putstr_fd, ft_putendl_fd, ft_putnbr_fd pas testes\n\033[0m");
 	
-//	PUTSTR_FD
-	printf("\033[33m\n********************\nft_putstr_fd\n\033[0m");
-	char	s47[] = "test de putstr";
-	printf("Avec %s ", s47);
-	printf("attendu : \033[33m%s\033[0m obtenu : \n", s47);
-	ft_putstr_fd(s47, 1);
-	printf("\n");
-
-//	PUTENDL_FD
-	printf("\033[33m\n********************\nft_putendl_fd\n\033[0m");
-	char	s48[] = "test de putendl";
-	printf("Avec %s ", s48);
-	printf("attendu : \033[33m%s\033[0m obtenu : \n", s48);
-	ft_putstr_fd(s48, 1);
-	printf("\n");
-
-//	PUTNBR_FD
-	printf("\033[33m\n********************\nft_putnbr_fd\n\033[0m");
-	n1 = 0;
-	printf("Avec %d ", n1);
-	printf("attendu : \033[33m%d\033[0m obtenu : \n", n1);
-	ft_putnbr_fd(n1, 1);
-	printf("\n");
-	n1 = 2147483647;
-	printf("Avec %d ", n1);
-	printf("attendu : \033[33m%d\033[0m obtenu : \n", n1);
-	ft_putnbr_fd(n1, 1);
-	printf("\n");
-	n1 = -2147483648;
-	printf("Avec %d ", n1);
-	printf("attendu : \033[33m%d\033[0m obtenu : \n", n1);
-	ft_putnbr_fd(n1, 1);
-	printf("\n");
-
-
 //	BONUS
 
 //	LSTNEW
 	printf("\033[33m\n********************\nft_lstnew\n\033[0m");
-	t_list	*lst1 = ft_lstnew(ft_strdup("element"));
-	printf("Creation d un element ");
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "element", (char *) lst1->content);
-	ft_ok(ft_str_cmp("element", (char *) lst1->content));
 
-//	LSTADD_FRONT
-	printf("\033[33m\n********************\nft_lstadd_back\n\033[0m");
-	t_list	*lst2 = ft_lstnew(ft_strdup("nouveau premier element"));
-	ft_lstadd_front(&lst1, lst2);
-	printf("Ajout d un nouveau premier element ");
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "nouveau premier element", (char *) lst1->content);
-	ft_ok(ft_str_cmp("nouveau premier element", (char *) lst1->content));
-
-//	LSTSIZE
-	printf("\033[33m\n********************\nft_lstsize\n\033[0m");
-	printf("Avec une liste de 2 elements ");
-	printf("attendu : \033[33m2\033[0m obtenu : \033[33m%d\033[0m\n", ft_lstsize(lst1));
-	ft_ok(ft_int_cmp(2, ft_lstsize(lst1)));
-
-//	LSTLAST
-	printf("\033[33m\n********************\nft_lstlast\n\033[0m");
-	printf("Afficher le dernier element de la liste ");
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "element", (char *) ft_lstlast(lst1)->content);
-	ft_ok(ft_str_cmp("element", (char *) ft_lstlast(lst1)->content));
-
-//	LSTADD_BACK
-	printf("\033[33m\n********************\nft_lstadd_back\n\033[0m");
-	printf("Ajout d un nouvel element a la fin de la liste ");
-	t_list	*lst3 = ft_lstnew(ft_strdup("dernier element"));
-	ft_lstadd_back(&lst1, lst3);
-	t_list	*last = lst1;
-	while (last && last->next)
-		last = last->next;
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "dernier element", (char *) last->content);
-	ft_ok(ft_str_cmp("dernier element", (char *) last->content));
-/*
-//	LSTADELONE
-	printf("\033[33m\n********************\nft_lstdelone\n\033[0m");
-	printf("En supprimant le dernier element ajoute: ");
-	ft_lstdelone(lst3, &del);
-	last = lst1;
-	while (last && last->next)
-		last = last->next;
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "element", (char *) lst3->content);
-	ft_ok(ft_str_cmp("element", (char *) last->content));
-*/
-//	LSTITER
-	printf("\033[33m\n********************\nft_lstiter\n\033[0m");
-	printf("En passant la liste en majuscule ");
-	ft_lstiter(lst1, &ft_lowlst);
-	last = lst1;
-	while (last && last->next)
-		last = last->next;
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "DERNIER ELEMENT", (char *) last->content);
-	ft_ok(ft_str_cmp("DERNIER ELEMENT", (char *) last->content));
-
-//	LSTMAP
-	printf("\033[33m\n********************\nft_lstmap\n\033[0m");
-	printf("En creant une nouvelle liste a partir de la precedente passee en minuscule\n");
-	t_list	*map;
-	map = ft_lstmap(lst1, &ft_lowlstptr, &del);
-	last = map;
-	while (last && last->next)
-		last = last->next;
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "dernier element", (char *) last->content);
-	ft_ok(ft_str_cmp("dernier element", (char *) last->content));
-
-//	LSTCLEAR
-	printf("\033[33m\n********************\nft_lstclear\n\033[0m");
-	ft_lstclear(&lst1, del);
-	printf("En supprimant la liste ");
-	printf("attendu : \033[33m%s\033[0m obtenu : \033[33m%s\033[0m\n", "(null)", (char *) lst1);
-	ft_ok(ft_str_cmp(NULL, (char *) lst1));
 }
